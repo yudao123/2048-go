@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/nsf/termbox-go"
 	"github.com/xuzhenglun/2048-Go/martix"
+	"math"
 	"strconv"
 	"time"
 )
@@ -13,6 +14,15 @@ const Add_NUM int = 1
 
 var step int
 var output_mode = termbox.OutputNormal
+
+var colorTable = [...]termbox.Attribute{
+	termbox.ColorMagenta,
+	termbox.ColorGreen,
+	termbox.ColorBlue,
+	termbox.ColorCyan,
+	termbox.ColorYellow,
+	termbox.ColorBlack,
+	termbox.ColorMagenta}
 
 type Go2048 struct {
 	martix.Martix
@@ -104,7 +114,7 @@ func (this Go2048) Init_termbox(x, y int) error {
 					if output_mode == termbox.Output256 {
 						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, 0x10+termbox.Attribute(this.Martix[i][j]%256), 0xe0-termbox.Attribute(this.Martix[i][j]*2%256))
 					} else {
-						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, termbox.ColorWhite, termbox.ColorMagenta)
+						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, termbox.ColorWhite, colorTable[int(math.Log2(float64(this.Martix[i][j])))%7])
 					}
 				}
 			}
@@ -183,9 +193,6 @@ func main() {
 	x, y := termbox.Size()
 
 	output_mode = termbox.SetOutputMode(termbox.Output256)
-	if output_mode != termbox.Output256 {
-		termbox.SetOutputMode(termbox.OutputNormal)
-	}
 
 	martix.Init()
 	var t Go2048
