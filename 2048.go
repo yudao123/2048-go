@@ -114,7 +114,7 @@ func (this Go2048) Init_termbox(x, y int) error {
 					if output_mode == termbox.Output256 {
 						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, 0x10+termbox.Attribute(this.Martix[i][j]%256), 0xe0-termbox.Attribute(this.Martix[i][j]*2%256))
 					} else {
-						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, termbox.ColorWhite, colorTable[int(math.Log2(float64(this.Martix[i][j])))])
+						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, termbox.ColorWhite, colorTable[int(math.Log2(float64(this.Martix[i][j])))%7])
 					}
 				}
 			}
