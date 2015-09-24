@@ -12,6 +12,7 @@ const MAX_LEN int = 4
 const Add_NUM int = 1
 
 var step int
+var output_mode = termbox.OutputNormal
 
 type Go2048 struct {
 	martix.Martix
@@ -100,7 +101,11 @@ func (this Go2048) Init_termbox(x, y int) error {
 			if this.Martix[i][j] > 0 {
 				str := fmt.Sprintf("%-5d", this.Martix[i][j])
 				for n, char := range str {
-					termbox.SetCell(x+j*6+1+n, y+i*2+1, char, 0x10+termbox.Attribute(this.Martix[i][j]%256), 0xe0-termbox.Attribute(this.Martix[i][j]*2%256))
+					if output_mode == termbox.Output256 {
+						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, 0x10+termbox.Attribute(this.Martix[i][j]%256), 0xe0-termbox.Attribute(this.Martix[i][j]*2%256))
+					} else {
+						termbox.SetCell(x+j*6+1+n, y+i*2+1, char, termbox.ColorWhite, termbox.ColorMagenta)
+					}
 				}
 			}
 		}
@@ -177,7 +182,10 @@ func main() {
 	defer termbox.Close()
 	x, y := termbox.Size()
 
-	termbox.SetOutputMode(termbox.Output256)
+	output_mode = termbox.SetOutputMode(termbox.Output256)
+	if output_mode != termbox.Output256 {
+		termbox.SetOutputMode(termbox.OutputNormal)
+	}
 
 	martix.Init()
 	var t Go2048
