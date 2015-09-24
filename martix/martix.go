@@ -135,7 +135,7 @@ func swap(a, b *int) {
 	*a = tmp
 }
 
-func (this Martix) AddNum() {
+func (this Martix) AddNum(num int) {
 	table := make([]int, 0)
 	for x, row := range this {
 		for y, _ := range row {
@@ -147,14 +147,14 @@ func (this Martix) AddNum() {
 
 	ch := make(chan bool, 2)
 	defer close(ch)
-	for i := 0; i < 2; i++ {
+	for i := 0; i < num; i++ {
 		go func() {
 			ran := rand.Intn(len(table))
 			this[table[ran]/len(this)][table[ran]%len(this)] = 2 << (rand.Uint32() % 2)
 			ch <- true
 		}()
 	}
-	for i := 0; i < 2; i++ {
+	for i := 0; i < num; i++ {
 		<-ch
 	}
 }

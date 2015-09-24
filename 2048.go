@@ -5,9 +5,11 @@ import (
 	"github.com/nsf/termbox-go"
 	"github.com/xuzhenglun/2048-Go/martix"
 	"strconv"
+	"time"
 )
 
 const MAX_LEN int = 4
+const Add_NUM int = 1
 
 var step int
 
@@ -93,14 +95,12 @@ func (this Go2048) Init_termbox(x, y int) error {
 		}
 	}
 
-	fg = termbox.ColorYellow
-	bg = termbox.ColorBlack
 	for i, row := range this.Martix {
 		for j, _ := range row {
 			if this.Martix[i][j] > 0 {
-				str := fmt.Sprint(this.Martix[i][j])
+				str := fmt.Sprintf("%-5d", this.Martix[i][j])
 				for n, char := range str {
-					termbox.SetCell(x+j*6+1+n, y+i*2+1, char, fg, bg)
+					termbox.SetCell(x+j*6+1+n, y+i*2+1, char, 0x10+termbox.Attribute(this.Martix[i][j]%256), 0xe0-termbox.Attribute(this.Martix[i][j]*2%256))
 				}
 			}
 		}
@@ -177,10 +177,12 @@ func main() {
 	defer termbox.Close()
 	x, y := termbox.Size()
 
+	termbox.SetOutputMode(termbox.Output256)
+
 	martix.Init()
 	var t Go2048
 	t.Martix, _ = martix.Init_martix(MAX_LEN)
-	t.AddNum()
+	t.AddNum(Add_NUM)
 	step = 0
 	ch := t.ListernKey()
 	defer close(ch)
@@ -211,6 +213,9 @@ func main() {
 		}
 
 		step++
-		t.AddNum()
+
+		t.Init_termbox(x/2-10, y/2-4)
+		time.Sleep(500 * time.Millisecond)
+		t.AddNum(Add_NUM)
 	}
 }
