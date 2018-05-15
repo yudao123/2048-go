@@ -185,6 +185,9 @@ func (t *Go2048) ActionAndReturnKey(event_queue chan termbox.Event) termbox.Key 
 }
 
 func main() {
+    
+    fmt.Println("welcome to 2048 game , forked by yinghua 1707")
+    
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
