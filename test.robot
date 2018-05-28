@@ -1,3 +1,3 @@
 *** Test Cases ***
 Case1
-    Log Hello,World
+    Log	Hello,World
